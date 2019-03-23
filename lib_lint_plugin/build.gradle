@@ -1,0 +1,45 @@
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile gradleApi()
+    compile localGroovy()
+
+    compile "com.android.tools.lint:lint-gradle:26.3.2"
+    compile "com.android.tools.build:gradle:3.3.2"
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir "../lib_lint_plugin/src/main/groovy"
+        }
+
+        java {
+            srcDir "../lib_lint_plugin/src/main/java"
+        }
+
+        resources {
+            srcDir "../lib_lint_plugin/src/main/resources"
+        }
+    }
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
+apply plugin: 'maven'
+
+group "com.jianghongkui.lint"
+version "1.0.0"
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('/Users/jianghongkui/IntellijProject/repo')) //todo 修改Maven对应URL
+        pom.groupId = "com.jianghongkui.lint"
+        pom.artifactId = "increment"
+        pom.version = "1.0.0"
+    }
+}
