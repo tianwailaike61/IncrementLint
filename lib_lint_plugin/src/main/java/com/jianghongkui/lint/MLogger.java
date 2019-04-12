@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,15 +43,16 @@ public class MLogger {
         builder.append("\n");
 
         if (builder.length() > 100) {
-            flush();
+            flush(builder.toString());
+            builder.delete(0, builder.length());
         }
     }
 
-    static void flush() {
+    static void flush(String s) {
         if (TextUtils.isEmpty(logFilePath)) {
             return;
         }
-        if (builder == null || builder.length() == 0) return;
+        if (s == null || s.length() == 0) return;
         File file = new File(logFilePath);
 
         FileOutputStream outputStream = null;
@@ -59,8 +61,8 @@ public class MLogger {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
             }
-            outputStream = new FileOutputStream(file);
-            outputStream.write(builder.toString().getBytes("UTF-8"));
+            outputStream = new FileOutputStream(file, true);
+            outputStream.write(s.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
