@@ -22,6 +22,7 @@ import org.gradle.api.Project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,10 +80,29 @@ class IncrementLintClient extends LintGradleClient {
 
     public void run(List<File> files) {
         try {
-            this.files = files;
+            this.files = new ArrayList<>(files.size());
+            for (File file : files) {
+                addFile(file);
+            }
             super.run(this.registry);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void addFile(File file) {
+        if (file == null || !file.exists()) {
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] temp = file.listFiles();
+            if (temp != null && temp.length > 0) {
+                for (File f : temp) {
+                    addFile(f);
+                }
+            }
+        } else {
+            this.files.add(file);
         }
     }
 

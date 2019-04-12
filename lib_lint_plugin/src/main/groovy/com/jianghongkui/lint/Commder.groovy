@@ -17,7 +17,7 @@ class Commder {
     private static List<FileStatus> getResult(File checkDir, AbsCmdType type) {
         String commandStr = type.getCommandStr(checkDir);
         Process process = commandStr.execute();
-        process.waitFor(5, TimeUnit.SECONDS);
+        process.waitFor();
         int exitValue = process.exitValue();
         MLogger.addLog(commandStr + " execute " + exitValue);
         if (exitValue != 0) {

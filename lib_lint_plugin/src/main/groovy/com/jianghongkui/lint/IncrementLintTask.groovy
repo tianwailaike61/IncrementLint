@@ -77,8 +77,9 @@ class IncrementLintTask extends DefaultTask {
         if (fileStatusList == null || fileStatusList.size() == 0) return null;
         List<File> fileList = new ArrayList<>(fileStatusList.size());
         for (FileStatus status : fileStatusList) {
-            if (status.getStatus() != FileStatus.FStatus.DELETE) {
-                fileList.add(new File(status.getPath()));
+            File file = new File(status.getPath());
+            if (status.getStatus() != FileStatus.FStatus.DELETE && file.exists()) {
+                fileList.add(file);
             }
         }
         return fileList;
