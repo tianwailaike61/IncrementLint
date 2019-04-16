@@ -39,6 +39,8 @@ class IncrementLintClient extends LintGradleClient {
     private List<File> files;
     private int errorCount = 0;
 
+    private static File BUILD_DIR;
+
     public IncrementLintClient(Project gradleProject, GlobalScope globalScope, VariantScope scope,
                                BuildToolInfo buildToolInfo, Variant variant) {
         super(gradleProject.getGradle().getGradleVersion(), new BuiltinIssueRegistry(), new LintCliFlags(),
@@ -48,6 +50,7 @@ class IncrementLintClient extends LintGradleClient {
         this.variant = variant;
         this.globalScope = globalScope;
         this.gradleProject = gradleProject;
+        BUILD_DIR = gradleProject.getBuildDir();
     }
 
     @Override
@@ -95,6 +98,9 @@ class IncrementLintClient extends LintGradleClient {
             return;
         }
         if (file.isDirectory()) {
+            if (BUILD_DIR.equals(file)) {
+                return;
+            }
             File[] temp = file.listFiles();
             if (temp != null && temp.length > 0) {
                 for (File f : temp) {

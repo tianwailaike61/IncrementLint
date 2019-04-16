@@ -43,12 +43,20 @@ public class MLogger {
         builder.append("\n");
 
         if (builder.length() > 100) {
-            flush(builder.toString());
-            builder.delete(0, builder.length());
+            flush();
         }
     }
 
-    static void flush(String s) {
+    static void flush() {
+        if (builder == null || builder.length() == 0) {
+            return;
+        }
+        String s = builder.toString();
+        builder.delete(0, builder.length());
+        writeToFile(s);
+    }
+
+    static void writeToFile(String s) {
         if (TextUtils.isEmpty(logFilePath)) {
             return;
         }

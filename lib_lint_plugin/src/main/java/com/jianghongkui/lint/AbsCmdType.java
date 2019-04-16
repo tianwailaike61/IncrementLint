@@ -56,6 +56,7 @@ public abstract class AbsCmdType {
             case SVN:
                 type = new SvnType();
                 break;
+            default:
         }
         return type;
     }
@@ -86,7 +87,8 @@ public abstract class AbsCmdType {
                 }
                 FileStatus fileStatus = new FileStatus();
                 String type = str.substring(0, 8).trim();
-                fileStatus.setPath(str.substring(8).trim());
+                String path = str.substring(8).trim().split(" ")[0];
+                fileStatus.setPath(path);
                 fileStatus.setStatus(getIntStatus(type));
                 list.add(fileStatus);
             }
@@ -123,7 +125,8 @@ public abstract class AbsCmdType {
                 }
                 FileStatus fileStatus = new FileStatus();
                 String type = str.substring(0, 2).trim();
-                fileStatus.setPath("./" + str.substring(2).trim());
+                String path = str.substring(2).trim().split(" ")[0];
+                fileStatus.setPath("./" + path);
                 fileStatus.setStatus(getIntStatus(type));
                 list.add(fileStatus);
             }
