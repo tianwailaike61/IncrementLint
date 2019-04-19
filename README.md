@@ -1,5 +1,6 @@
 # IncrementLint
 该项目主要针对Android项目编写lint gradle 插件，实现lint增量检查。参考：[自定义lint增量检查](https://www.jianshu.com/p/98b8b7d6fed3)
+注意：该项目仅对Java检查做了测试，未对kotlin做兼容。如果项目中需要检查kotlin，可按照[Android Lint增量扫描实战纪要](https://www.jianshu.com/p/4833a79e9396)中介绍的原理并参考该项目自行适配。
 
 ### 使用方式
 1、修改lib_lint_plugin模块下的build.gradle
