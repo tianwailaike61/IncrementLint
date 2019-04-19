@@ -17,8 +17,8 @@ import java.util.List;
  */
 public abstract class AbsCmdType {
 
-    private final static int GIT = 1;
-    private final static int SVN = 2;
+    public final static int GIT = 1;
+    public final static int SVN = 2;
 
     abstract String getCommandStr(File checkDir);
 

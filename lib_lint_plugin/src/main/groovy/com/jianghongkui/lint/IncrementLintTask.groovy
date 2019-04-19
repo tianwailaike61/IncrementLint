@@ -1,6 +1,6 @@
 package com.jianghongkui.lint
 
-import com.android.build.gradle.internal.api.ApplicationVariantImpl
+import com.android.build.gradle.internal.api.BaseVariantImpl
 import com.android.build.gradle.internal.scope.GlobalScope
 import com.android.builder.model.AndroidProject
 import com.android.builder.model.Variant
@@ -17,12 +17,11 @@ import org.gradle.tooling.provider.model.ToolingModelBuilder
  *
  * lint增量任务
  *
- * @author hongkui.jiang
- * @Date 2019/3/12
+ * @author hongkui.jiang* @Date 2019/3/12
  */
 class IncrementLintTask extends DefaultTask {
 
-    private ApplicationVariantImpl applicationVariant;
+    private BaseVariantImpl applicationVariant;
     private GlobalScope globalScope;
 
     @TaskAction
@@ -34,7 +33,8 @@ class IncrementLintTask extends DefaultTask {
         }
         int toolType = Commder.checkToolType(getProject());
 
-        MLogger.addLog("The type of the tool is " + toolType);
+        MLogger.addLog("check %s", getProject().getProjectDir());
+        MLogger.addLog("The type of the tool is %d", toolType);
         //获取修改文件
         List<FileStatus> fileStatusList = Commder.run(getProject().getProjectDir(), toolType);
 
@@ -44,26 +44,26 @@ class IncrementLintTask extends DefaultTask {
             fileList.add(getProject().getProjectDir());
         }
 
-        if (fileList == null) {
+        if (fileList == null || fileList.isEmpty()) {
             MLogger.addLog("IncrementLintTask no checked file")
             return;
         }
-        MLogger.addLog("The changed files is " + Arrays.toString(fileList));
+        MLogger.addLog("The changed files is %d", fileList.size());
+        for (File file : fileList) {
+            MLogger.addLog("- %s", file.getPath());
+        }
         IncrementLintClient client = new IncrementLintClient(getProject(), globalScope,
                 applicationVariant.getVariantData().getScope(), getBuildTools(globalScope), getVariant());
 
         client.syncConfigOptions();
-        try {
-            client.run(fileList);
-            int count = client.getResult();
-            if (count > 0) {
-                MLogger.flush()
-                File resultFile = new File(globalScope.getReportsDir(), "Fnlint.html");
-                throw new GradleException("there are " + count + " errors found by FnLint,you can see more info in " +
-                        resultFile.toURI());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        client.run(fileList);
+        int count = client.getResult();
+        if (count > 0) {
+            MLogger.flush()
+            String suffix = variant.name.capitalize()
+            File resultFile = new File(globalScope.getReportsDir(), "lint_${suffix}_result.html");
+            throw new GradleException("there are " + count + " errors found by FnLint,you can see more info in " +
+                    resultFile.toURI());
         }
         MLogger.flush()
     }
@@ -85,7 +85,7 @@ class IncrementLintTask extends DefaultTask {
         return fileList;
     }
 
-    void setApplicationVariant(ApplicationVariantImpl variant) {
+    void setApplicationVariant(BaseVariantImpl variant) {
         if (variant == null) return;
         applicationVariant = variant;
         globalScope = variant.getVariantData().getScope().getGlobalScope();

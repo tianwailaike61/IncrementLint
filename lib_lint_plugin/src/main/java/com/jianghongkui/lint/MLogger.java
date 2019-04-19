@@ -47,6 +47,10 @@ public class MLogger {
         }
     }
 
+    public static void addLog(String fmt, Object... objects) {
+        addLog(String.format(fmt, objects));
+    }
+
     static void flush() {
         if (builder == null || builder.length() == 0) {
             return;
