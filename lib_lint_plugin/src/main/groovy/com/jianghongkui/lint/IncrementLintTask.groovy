@@ -58,15 +58,7 @@ class IncrementLintTask extends DefaultTask {
         IncrementLintClient client = new IncrementLintClient(getProject(), globalScope,
                 applicationVariant.getVariantData().getScope(), getBuildTools(globalScope), getVariant());
         client.syncConfigOptions();
-        try {
-            client.run(fileList);
-        } catch (Exception e) {
-            for (Method m : clz.getMethods()) {
-                println("jhk-11--method " + m.name + " " + m.accessible)
-            }
-            println("jhk--e==" + e.toString())
-        }
-
+        client.run(fileList);
         int count = client.getResult();
         if (count > 0) {
             MLogger.flush()
