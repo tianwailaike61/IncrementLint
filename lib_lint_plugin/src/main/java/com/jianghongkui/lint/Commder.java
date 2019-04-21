@@ -15,7 +15,7 @@ import static java.util.Collections.emptyList;
  * @Date 2019-04-19
  */
 public class Commder {
-    private List<FileStatus> getResult(File checkDir, AbsCmdType type) throws IOException, InterruptedException {
+    private static List<FileStatus> getResult(File checkDir, AbsCmdType type) throws IOException, InterruptedException {
         if (type == null) {
             return emptyList();
         }
@@ -33,7 +33,7 @@ public class Commder {
         return list;
     }
 
-    List<FileStatus> check(File checkDir, int checkType) {
+   public static List<FileStatus> run(File checkDir, int checkType) {
         AbsCmdType type = AbsCmdType.get(checkType);
         try {
             return getResult(checkDir, type);
@@ -48,7 +48,7 @@ public class Commder {
     /**
      * 检查使用的仓库管理工具
      */
-    int checkToolType(Project project) {
+   public static int checkToolType(Project project) {
         File rootDir = project.getRootDir();
 
         File gitFile = new File(rootDir, ".git");

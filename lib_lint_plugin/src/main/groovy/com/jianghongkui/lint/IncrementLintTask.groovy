@@ -12,6 +12,9 @@ import org.gradle.api.GradleException
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.tasks.TaskAction
 import org.gradle.tooling.provider.model.ToolingModelBuilder
+import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticSuppressor
+
+import java.lang.reflect.Method
 
 /**
  *
@@ -54,9 +57,16 @@ class IncrementLintTask extends DefaultTask {
         }
         IncrementLintClient client = new IncrementLintClient(getProject(), globalScope,
                 applicationVariant.getVariantData().getScope(), getBuildTools(globalScope), getVariant());
-
         client.syncConfigOptions();
-        client.run(fileList);
+        try {
+            client.run(fileList);
+        } catch (Exception e) {
+            for (Method m : clz.getMethods()) {
+                println("jhk-11--method " + m.name + " " + m.accessible)
+            }
+            println("jhk--e==" + e.toString())
+        }
+
         int count = client.getResult();
         if (count > 0) {
             MLogger.flush()
@@ -85,7 +95,7 @@ class IncrementLintTask extends DefaultTask {
         return fileList;
     }
 
-    void setApplicationVariant(BaseVariantImpl variant) {
+    void setVariant(BaseVariantImpl variant) {
         if (variant == null) return;
         applicationVariant = variant;
         globalScope = variant.getVariantData().getScope().getGlobalScope();
