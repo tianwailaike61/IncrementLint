@@ -1,1 +1,1 @@
-include ':app', ':lib_lint_plugin'
+include ':app', 'lib_lint_plugin','lib_client'

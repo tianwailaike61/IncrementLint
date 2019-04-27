@@ -1,0 +1,28 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly('com.android.tools.lint:lint-gradle:26.4.0') { //该版本需与导入项目的gradle版本匹配
+        exclude group: "org.codehaus.groovy"
+        exclude group: "com.android.tools.build"
+    }
+    compileOnly gradleApi()
+    compileOnly("com.android.tools.build:gradle:3.4.0")
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
+
+apply plugin: 'maven'
+
+group "com.jianghongkui.lint"
+version "1.0.0"
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('/Users/jianghongkui/IntellijProject/repo')) //todo 修改Maven对应URL
+        pom.groupId = "com.jianghongkui.lint"
+        pom.artifactId = "lib_client"
+        pom.version = "1.0.0"
+    }
+}

@@ -51,7 +51,7 @@ public class MLogger {
         addLog(String.format(fmt, objects));
     }
 
-    static void flush() {
+    public static void flush() {
         if (builder == null || builder.length() == 0) {
             return;
         }
@@ -60,7 +60,7 @@ public class MLogger {
         writeToFile(s);
     }
 
-    static void writeToFile(String s) {
+    private static void writeToFile(String s) {
         if (TextUtils.isEmpty(logFilePath)) {
             return;
         }

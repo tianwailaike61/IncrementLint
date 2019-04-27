@@ -16,7 +16,13 @@ class LintPlugin implements Plugin<Project> {
     void apply(Project project) {
         this.project = project
 
-        MLogger.setOutFile(new File(project.rootProject.buildDir, "LintRun.log").getAbsolutePath())
+        def lintExtension = project.extensions.create("incrementLint", LintExtension.class)
+        project.extensions.create("incrementLintOptions", IncrementLintOptions.class);
+        lintExtension.init(project)
+
+        ChangeFileCheckTask.create(project)
+
+        MLogger.setOutFile(lintExtension.logPath)
         if (project.plugins.hasPlugin("com.android.application")) {
             project.android.applicationVariants.all { variant ->
                 maybeLint(variant, "App")
@@ -41,7 +47,6 @@ class LintPlugin implements Plugin<Project> {
     }
 
     private void addDebugLintTask(String suffix, BaseVariantImpl variant, String type) {
-        MLogger.addLog("addDebugLintTask-" + suffix + "" + variant + " " + type)
         if (type == "App") {
             setAppLintTask(suffix, variant)
         } else {
@@ -52,18 +57,16 @@ class LintPlugin implements Plugin<Project> {
     private void setAppLintTask(String suffix, BaseVariantImpl variant) {
         String lintTaskName = "AppIncrementLint${suffix}Task"
         //创建FnLintTask 任务
-        IncrementLintTask lintTask = project.tasks.replace(lintTaskName, IncrementLintTask)
-        lintTask.setVariant(variant)
-        dependTask(lintTask, "prepareLintJar", "compile${suffix}JavaWithJavac", "process${suffix}Manifest")
+        IncrementLintTask lintTask = IncrementLintTask.create(variant.getVariantData().getScope(), lintTaskName)
+        dependTask(lintTask, "prepareLintJar", "compile${suffix}JavaWithJavac", "process${suffix}Manifest", "getChangedFile")
         dependTask("assemble${suffix}", lintTaskName)
     }
 
     private void setLibLintTask(String suffix, BaseVariantImpl variant) {
         String lintTaskName = "LibIncrementLint${suffix}Task"
         //创建FnLintTask 任务
-        IncrementLintTask lintTask = project.tasks.replace(lintTaskName, IncrementLintTask)
-        lintTask.setVariant(variant)
-        dependTask(lintTask, "prepareLintJar", "compile${suffix}JavaWithJavac", "process${suffix}Manifest")
+        IncrementLintTask lintTask = IncrementLintTask.create(variant.getVariantData().getScope(), lintTaskName)
+        dependTask(lintTask, "prepareLintJar", "compile${suffix}JavaWithJavac", "process${suffix}Manifest", "getChangedFile")
         dependTask("bundleLibRuntime${suffix}", lintTaskName)
     }
 
