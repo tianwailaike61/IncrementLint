@@ -2,7 +2,8 @@
 该项目主要针对Android项目编写lint gradle 插件，实现lint增量检查。参考：[自定义lint增量检查](https://www.jianshu.com/p/98b8b7d6fed3)
 
 ## 功能描述
-1、自定义Android常用规则（参见lib-rules）
+
+1、自定义Android常用规则（参见lib-rules)  
 2、利用gradle插件和版本管理（git或svn）实现对修改代码进行检查，避免大型项目代码量过大导致检查时间长的问题
 3、该项目保证仅检查java代码的正确性
 
