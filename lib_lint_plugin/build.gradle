@@ -7,10 +7,10 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
 
-    implementation("com.android.tools.lint:lint-gradle:26.4.0") {
+    implementation("com.android.tools.lint:lint-gradle:26.2.1") {
         exclude group: "org.codehaus.groovy"
     }
-    implementation "com.android.tools.build:gradle:3.4.0"
+    implementation "com.android.tools.build:gradle:3.2.1"
 
     implementation project(":lib_client")
 }
@@ -31,19 +31,19 @@ sourceSets {
     }
 }
 
-sourceCompatibility = "8"
-targetCompatibility = "8"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 apply plugin: 'maven'
 
-group "com.jianghongkui.lint"
-version "1.0.0"
+group GROUP
+version LIB_VERSION
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('/Users/jianghongkui/IntellijProject/repo')) //todo 修改Maven对应URL
-        pom.groupId = "com.jianghongkui.lint"
+        repository(url: REMOTE_URL)
+        pom.groupId = GROUP
         pom.artifactId = "increment"
-        pom.version = "1.0.0"
+        pom.version = LIB_VERSION
     }
 }

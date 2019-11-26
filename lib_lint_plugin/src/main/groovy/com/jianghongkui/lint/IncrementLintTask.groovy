@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull
  * @author hongkui.jiang* @Date 2019/3/12
  */
 class IncrementLintTask extends LintBaseTask {
-    private VariantInputs variantInputs
+    private LintBaseTask.VariantInputs variantInputs
 
     private String variantName
 
@@ -30,7 +30,7 @@ class IncrementLintTask extends LintBaseTask {
         Project project = scope.getGlobalScope().project
         //创建FnLintTask 任务
         IncrementLintTask lintTask = project.tasks.replace(taskName, IncrementLintTask)
-        new IncrementCreationAction(scope).configure(lintTask)
+        new IncrementCreationAction(scope).execute(lintTask)
         return lintTask
     }
 
@@ -78,11 +78,11 @@ class IncrementLintTask extends LintBaseTask {
         this.variantName = variantName
     }
 
-    VariantInputs getVariantInputs() {
+    LintBaseTask.VariantInputs getVariantInputs() {
         return variantInputs
     }
 
-    void setVariantInputs(VariantInputs variantInputs) {
+    void setVariantInputs(LintBaseTask.VariantInputs variantInputs) {
         this.variantInputs = variantInputs
     }
 
@@ -194,7 +194,7 @@ class IncrementLintTask extends LintBaseTask {
         }
     }
 
-    static class IncrementCreationAction extends LintBaseTask.BaseCreationAction<IncrementLintTask> {
+    static class IncrementCreationAction extends LintBaseTask.BaseConfigAction<IncrementLintTask> {
         private final VariantScope scope
 
         IncrementCreationAction(VariantScope scope) {
@@ -213,9 +213,8 @@ class IncrementLintTask extends LintBaseTask {
         }
 
         @Override
-        void configure(IncrementLintTask lintTask) {
-            super.configure(lintTask)
-
+        void execute(IncrementLintTask lintTask) {
+            super.execute(lintTask)
             lintTask.setVariantName(scope.getFullVariantName())
 
             lintTask.setVariantInputs(new LintBaseTask.VariantInputs(scope))

@@ -1,18 +1,24 @@
 apply plugin: 'java-library'
+apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly('com.android.tools.lint:lint-gradle:26.2.1') { //该版本需与导入项目的gradle版本匹配
-        exclude group: "org.codehaus.groovy"
-        exclude group: "com.android.tools.build"
+    compileOnly "com.android.tools.lint:lint-api:26.2.1"
+    compileOnly "com.android.tools.lint:lint-checks:26.2.1"
+    compileOnly "com.android.tools.lint:lint-gradle:26.2.1"
+}
+
+jar {
+    manifest {
+        attributes('Lint-Registry-v2': 'com.jianghongkui.lib_rules.MIssueRegistry')
     }
-    compileOnly gradleApi()
-    compileOnly("com.android.tools.build:gradle:3.2.1")
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+group rootProject.ext.GROUP
+version "1.1.0"
 apply plugin: 'maven'
 
 group GROUP
@@ -22,7 +28,7 @@ uploadArchives {
     repositories.mavenDeployer {
         repository(url: REMOTE_URL)
         pom.groupId = GROUP
-        pom.artifactId = "lib_client"
+        pom.artifactId = "lib_ruler"
         pom.version = LIB_VERSION
     }
 }
