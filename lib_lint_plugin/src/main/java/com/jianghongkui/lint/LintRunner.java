@@ -40,16 +40,20 @@ public class LintRunner {
             ClassLoader loader = getLintClassLoader(gradle, lintClassPath, clientJar.getName());
             Class cls = loader.loadClass(clientClz.getName());
             Method create = cls.getMethod("create", LintExecutionRequest.class);
+            create.setAccessible(true);
             Object obj = create.invoke(null, request);
             if (obj != null && run(obj, checkFiles) > 0) {
                 return getCheckFailedFiles(obj);
             }
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+            MLogger.addException(e);
             throw wrapExceptionAsString(e);
-        } catch (Throwable t) {
-            // Reflection problem
-            throw wrapExceptionAsString(t);
+        } finally {
+            MLogger.flush();
         }
+        // Reflection problem
+
+
         return Collections.emptyList();
     }
 

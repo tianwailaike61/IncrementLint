@@ -3,6 +3,7 @@ package com.jianghongkui.lint
 import com.android.build.gradle.internal.dsl.LintOptions
 import com.android.build.gradle.internal.scope.VariantScope
 import com.android.build.gradle.tasks.LintBaseTask
+import com.android.builder.core.AndroidBuilder
 import com.android.builder.model.Version
 import com.android.builder.sdk.TargetInfo
 import com.android.sdklib.BuildToolInfo
@@ -60,9 +61,14 @@ class IncrementLintTask extends LintBaseTask {
             IncrementLintOptions options = project.getExtensions().findByType(IncrementLintOptions.class)
             File resultFile = new File(options.getHtmlOutput())
             MLogger.flush()
-            throw new GradleException("there are " + strings.size() + " errors found by FnLint,you can see more info in " +
+            throw new GradleException("there are " + strings.size() + " errors found by IncrementLint,you can see more info in " +
                     resultFile.toURI())
         }
+    }
+
+    @Override
+    AndroidBuilder getBuilder() {
+        return super.getBuilder()
     }
 
     private Collection<String> runLint(Collection<File> checkFiles) {
@@ -157,10 +163,10 @@ class IncrementLintTask extends LintBaseTask {
 
         @Override
         BuildToolInfo getBuildTools() {
-            TargetInfo targetInfo = IncrementLintTask.this.androidBuilder.getTargetInfo()
-            Preconditions.checkState(
-                    targetInfo != null, "androidBuilder.targetInfo required for task '%s'.", getName())
-            return targetInfo.getBuildTools()
+            TargetInfo targetInfo = getBuilder().getTargetInfo();
+            Preconditions.checkState(targetInfo != null,
+                    "androidBuilder.targetInfo required for task '%s'.", getName());
+            return targetInfo.getBuildTools();
         }
 
         @Override

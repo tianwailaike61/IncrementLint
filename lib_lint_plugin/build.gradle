@@ -7,6 +7,7 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
 
+    //lint-gradle版本需与gradle版本一一对应
     implementation("com.android.tools.lint:lint-gradle:26.2.1") {
         exclude group: "org.codehaus.groovy"
     }

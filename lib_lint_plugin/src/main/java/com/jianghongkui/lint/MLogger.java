@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,6 +51,13 @@ public class MLogger {
 
     public static void addLog(String fmt, Object... objects) {
         addLog(String.format(fmt, objects));
+    }
+
+    public static void addException(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        addLog(sw.toString());
     }
 
     public static void flush() {
