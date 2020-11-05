@@ -1,1 +1,3 @@
-include ':app', 'lib_lint_plugin','lib_client','lib-rules'
+include ':app', 'lib-rules'
+
+includeBuild('lib_lint_plugin')

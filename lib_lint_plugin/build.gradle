@@ -1,5 +1,21 @@
+buildscript {
+
+    ext {
+        GROUP = 'com.jianghongkui.lint'
+        LIB_VERSION = '1.0.0'
+        REMOTE_URL = uri("../output")
+    }
+
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+}
+
 apply plugin: 'groovy'
-apply plugin: 'java'
+apply plugin: 'java-gradle-plugin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,6 +50,20 @@ sourceSets {
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
+
+gradlePlugin {
+    plugins {
+        IncrementLint {
+            id = 'IncrementLint'
+            implementationClass = 'com.jianghongkui.lint.LintPlugin'
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 
 apply plugin: 'maven'
 

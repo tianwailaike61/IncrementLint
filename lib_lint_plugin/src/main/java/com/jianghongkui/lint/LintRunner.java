@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -110,6 +111,18 @@ public class LintRunner {
 
     private static List<URL> computeUrlsFallback(Set<File> lintClassPath, String customJarName) {
         List<URL> urls = new ArrayList<>();
+        Iterator<File> iterator = lintClassPath.iterator();
+        while (iterator.hasNext()) {
+            File file = iterator.next();
+            if (file.getName().startsWith(customJarName)) {
+                try {
+                    urls.add(file.toURI().toURL());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                iterator.remove();
+            }
+        }
         lintClassPath.forEach(file -> {
             String name = file.getName();
             if (name.startsWith("uast-") ||
@@ -119,7 +132,6 @@ public class LintRunner {
                     name.startsWith("kxml2-") ||
                     name.startsWith("trove4j-") ||
                     name.startsWith("groovy-all-") ||
-                    name.startsWith(customJarName) ||
 
                     // All the lint jars, except lint-gradle-api jar (self)
                     name.startsWith("lint-") &&
