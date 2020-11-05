@@ -44,9 +44,11 @@ dependencies {
     lintChecks project(path: ':lib-rules')//lintChecks "{group}:{name}:{version}"
 }
 ```
+### 日志
+2020.11.5
+  解决升级AndroidX包中自定义规则导致lib-rules中的规则无效
 
-
-###参考  
+### 参考  
 [Android Lint增量扫描实战纪要](https://www.jianshu.com/p/4833a79e9396)  
 [Android Lint工作原理剖析](http://www.androidchina.net/5106.html)
 
