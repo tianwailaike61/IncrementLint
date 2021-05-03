@@ -1,2 +1,0 @@
-includeFlat("lib_client")
-rootProject.name = "lintplugin"

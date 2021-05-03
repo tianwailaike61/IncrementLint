@@ -1,0 +1,28 @@
+apply plugin: 'java-gradle-plugin'
+
+apply from: "../lint.gradle"
+
+dependencies {
+    compileOnly gradleApi()
+    compileOnly deps.androidPlugin
+    implementation project(path: ":lib_lint_base")
+    implementation project(path: ':lib_lint_client_v3_2')
+    implementation project(path: ":lib_lint_client_v3_3")
+    implementation project(path: ":lib_lint_client_v3_6")
+    implementation project(path: ":lib_lint_client_v4_1")
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "../lib_lint_plugin/src/main/java"
+        }
+
+        resources {
+            srcDir "../lib_lint_plugin/src/main/resources"
+        }
+    }
+}
+
+group GROUP
+version VERSION

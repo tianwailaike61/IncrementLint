@@ -1,0 +1,15 @@
+apply from: "../lint.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly project(":lib_lint_base")
+    compileOnly gradleApi()
+    compileOnly "com.android.tools.build:gradle:4.1.3"
+    compileOnly("com.android.tools.lint:lint-gradle:27.1.3") { //该版本需与导入项目的gradle版本匹配
+        exclude group: "org.codehaus.groovy"
+        exclude group: "com.android.tools.build"
+    }
+}
+
+group GROUP
+version VERSION

@@ -1,0 +1,23 @@
+ext {
+    GROUP = "com.jianghongkui.lint"
+    MAVEN_URL = uri('../output')
+    versions = [
+            'kotlin'       : '1.3.72',
+            'androidPlugin': '4.1.3',
+            'androidTools' : '26.2.1',
+            'java'         : JavaVersion.VERSION_1_8,
+    ]
+    deps = [
+            androidPlugin: "com.android.tools.build:gradle:${versions.androidPlugin}",
+            'kotlin'     : [
+                    'plugin': "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+                    'stdlib': "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+            ],
+//            'lint'       : [
+//                    'core'  : "com.android.tools.lint:lint:${versions.androidTools}",
+//                    'api'   : "com.android.tools.lint:lint-api:${versions.androidTools}",
+//                    'checks': "com.android.tools.lint:lint-checks:${versions.androidTools}",
+//                    'gradle': "com.android.tools.lint:lint-gradle:${versions.androidTools}"
+//            ],
+    ]
+}

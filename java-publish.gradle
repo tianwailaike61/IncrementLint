@@ -1,0 +1,17 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        Component(MavenPublication) {
+            from components.java
+            groupId = "com.jianghongkui.lint"
+            artifactId = POM_ARTIFACT_ID
+            version = VERSION
+        }
+    }
+    repositories {
+        maven {
+            url rootProject.ext.MAVEN_URL
+        }
+    }
+}

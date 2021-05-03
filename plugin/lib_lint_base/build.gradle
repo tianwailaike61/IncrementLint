@@ -1,0 +1,12 @@
+apply from: "../lint.gradle"
+
+dependencies {
+    compileOnly gradleApi()
+    compileOnly "com.android.tools.build:gradle:3.2.1"
+    compileOnly("com.android.tools.lint:lint-gradle:26.2.1") { //该版本需与导入项目的gradle版本匹配
+        exclude group: "org.codehaus.groovy"
+        exclude group: "com.android.tools.build"
+    }
+}
+group GROUP
+version VERSION

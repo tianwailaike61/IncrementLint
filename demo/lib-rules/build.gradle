@@ -1,0 +1,23 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly "com.android.tools.lint:lint-api:27.1.3"
+    compileOnly "com.android.tools.lint:lint-checks:27.1.3"
+    compileOnly "com.android.tools.lint:lint-gradle:27.1.3"
+}
+
+jar {
+    manifest {
+        attributes('Lint-Registry-v2': 'com.twlk.lib_rules.MIssueRegistry')
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group rootProject.ext.GROUP
+version "1.1.0"
+
+apply from: "../../java-publish.gradle"
