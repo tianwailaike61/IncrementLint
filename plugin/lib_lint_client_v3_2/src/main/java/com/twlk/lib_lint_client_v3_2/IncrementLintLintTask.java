@@ -56,7 +56,7 @@ public class IncrementLintLintTask extends IncrementLintLintBaseTask {
         return new LintRunner();
     }
 
-    static class TaskConfigure extends BaseTaskConfigure<IncrementLintLintTask> {
+    public static class TaskConfigure extends BaseTaskConfigure<IncrementLintLintTask> {
 
         public TaskConfigure(BaseVariant variant) {
             super(variant);
@@ -70,7 +70,7 @@ public class IncrementLintLintTask extends IncrementLintLintBaseTask {
         }
     }
 
-    static class IncrementCreationAction extends LintBaseTask.BaseConfigAction<IncrementLintLintTask> implements IIncrementCreationAction<IncrementLintLintTask> {
+   public static class IncrementCreationAction extends LintBaseTask.BaseConfigAction<IncrementLintLintTask> implements IIncrementCreationAction<IncrementLintLintTask> {
 
         private final ITaskConfigure configure;
 

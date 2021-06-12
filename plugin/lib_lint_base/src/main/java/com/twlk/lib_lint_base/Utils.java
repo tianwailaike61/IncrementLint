@@ -46,12 +46,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author twlk
  * @Date 2019/3/12
  */
 public class Utils {
+
+    public static ExecutorService service = Executors.newFixedThreadPool(2);
 
     private Utils() {
     }
@@ -133,7 +143,7 @@ public class Utils {
         return builder.toString();
     }
 
-    public static void readFile(File file, com.twlk.lib_lint_base.IReadLineCallback callback) {
+    public static void readFile(File file, IReadLineCallback callback) {
         if (file == null || !file.exists()) {
             return;
         }
@@ -148,13 +158,13 @@ public class Utils {
         }
     }
 
-    public static void readStream(InputStream inputStream, com.twlk.lib_lint_base.IReadLineCallback callback) {
+    public static void readStream(InputStream inputStream, IReadLineCallback callback) {
         InputStreamReader isr = null;
-        BufferedReader reader = null;
         String str;
         try {
             isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            reader = new BufferedReader(isr);
+            BufferedReader reader = new BufferedReader(isr);
+
             while ((str = reader.readLine()) != null) {
                 if (!callback.onRead(str)) {
                     break;
@@ -163,13 +173,13 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Utils.closeStream(reader, isr);
+            Utils.closeStream(isr);
         }
     }
 
-    public static void runCommand(String s, IReadLineCallback callback) {
+    public static void runCommand(String s, File dir, IReadLineCallback callback) {
         try {
-            exec(s, new IExecListener() {
+            exec(s, dir, new IExecListener() {
                 @Override
                 public void error(String s) {
 
@@ -181,8 +191,6 @@ public class Utils {
                 }
             });
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -206,35 +214,65 @@ public class Utils {
         return exec(cmdStr, null);
     }
 
-    public static boolean exec(String cmdStr, IExecListener listener) throws InterruptedException, IOException, GradleException {
-        Process process = Runtime.getRuntime().exec(cmdStr);
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        boolean flag = true;
-        String s;
-        StringBuilder errorBuild = new StringBuilder();
-        while ((s = stdInput.readLine()) != null) {
-            if (listener != null) {
+    public static boolean exec(String cmdStr, File dir) throws InterruptedException, IOException, GradleException {
+        return exec(cmdStr, dir, null);
+    }
+
+    public static boolean exec(String cmdStr, File dir, IExecListener listener) throws GradleException, InterruptedException {
+        ProcessBuilder builder = new ProcessBuilder();
+        if (dir != null) {
+            builder.directory(dir);
+        }
+        List<String> list = new ArrayList<>(Arrays.asList(cmdStr.split(" ")));
+        builder.command(list);
+        Process process;
+        try {
+            process = builder.start();
+        } catch (IOException e) {
+            throw new GradleException("start error", e);
+        }
+        Future<String> future = service.submit(() -> {
+            StringBuffer buffer = new StringBuffer();
+            readStream(process.getInputStream(), line -> {
+                buffer.append(line).append("\n");
+                return true;
+            });
+            return buffer.toString();
+        });
+        AtomicBoolean isError = new AtomicBoolean(false);
+        Future<String> errFuture = service.submit(() -> {
+            StringBuffer buffer = new StringBuffer();
+            readStream(process.getErrorStream(), line -> {
+                buffer.append(line).append("\n");
+                isError.compareAndSet(false, true);
+                return true;
+            });
+            return buffer.toString();
+        });
+        int ret = process.waitFor();
+        FnLogger.addLog("%s execute ret:%d isError:%b", cmdStr, ret, isError.get());
+        if (ret != 0 || isError.get()) {
+            try {
+                FnLogger.addLog("error result: %s", errFuture.get());
+            } catch (ExecutionException e) {
+                throw new GradleException("fail to get error info", e);
+            }
+            FnLogger.flush();
+            throw new GradleException("The command execute failed,please check your config\n");
+        }
+        String result;
+        try {
+            result = future.get();
+        } catch (ExecutionException e) {
+            throw new GradleException("fail to get info", e);
+        }
+        if (result == null || result.isEmpty()) {
+            return true;
+        }
+        if (listener != null) {
+            for (String s : result.split("\n")) {
                 listener.success(s);
             }
-
-        }
-        while ((s = stdError.readLine()) != null) {
-            errorBuild.append(s).append("\n");
-            if (listener != null) {
-                listener.error(s);
-            }
-            if (flag) {
-                flag = false;
-            }
-        }
-        process.waitFor();
-        FnLogger.addLog("%s execute %b", cmdStr, flag);
-        if (!flag) {
-            FnLogger.flush();
-            String result = errorBuild.toString();
-            FnLogger.addLog("result:%s", result);
-            throw new GradleException("The command execute failed,please check your config\n" + result);
         }
         return true;
     }
@@ -283,8 +321,8 @@ public class Utils {
         String[] version1Array = version1[0].split("[._]");
         String[] version2Array = version2[0].split("[._]");
 
-        String preRelease1 = new String();
-        String preRelease2 = new String();
+        String preRelease1 = "";
+        String preRelease2 = "";
         if (version1.length > 1) {
             preRelease1 = version1[1];
         }
@@ -318,7 +356,7 @@ public class Utils {
                 return -1;
             } else if (preRelease1.isEmpty() && !preRelease2.isEmpty()) {
                 return 1;
-            } else if (!preRelease1.isEmpty() && !preRelease2.isEmpty()) {
+            } else if (!preRelease1.isEmpty()) {
                 int preReleaseDiff = preRelease1.compareTo(preRelease2);
                 if (preReleaseDiff > 0) {
                     return 1;
@@ -345,11 +383,7 @@ public class Utils {
                 Field version = aClass.getDeclaredField("ANDROID_GRADLE_PLUGIN_VERSION");
                 version.setAccessible(true);
                 return (String) version.get(aClass);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
+            } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }

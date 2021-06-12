@@ -105,19 +105,18 @@ public abstract class AbsCmd {
      * 检查使用的仓库管理工具
      */
     private static int checkToolType(Project project) {
-        String path = project.getProjectDir().getAbsolutePath();
-        if (check(String.format(Svn.CHANGED_COM, path))) {
+        if (check(Svn.CHANGED_COM, project.getProjectDir())) {
             return AbsCmd.SVN;
-        } else if (check(String.format(Git.CHANGED_COM, path))) {
-            return AbsCmd.GIT;
-        } else {
-            return -1;
         }
+        if (check(Git.CHANGED_COM, project.getProjectDir())) {
+            return AbsCmd.GIT;
+        }
+        return -1;
     }
 
-    private static boolean check(String cmd) {
+    private static boolean check(String cmd, File dir) {
         try {
-            return Utils.exec(cmd);
+            return Utils.exec(cmd, dir);
         } catch (GradleException | InterruptedException | IOException e) {
             //ignore e
         }
@@ -128,7 +127,7 @@ public abstract class AbsCmd {
      * svn 命令
      */
     private static class Svn extends AbsCmd {
-        private final static String CHANGED_COM = "svn status %1s";
+        private final static String CHANGED_COM = "svn status";
         private final static String VERSION_COM = "svn info";
         private final static String VERSION_ChANGE_COM = "svn log -r %1s:%2s -v -q";
         private String relativeUrl = "";
@@ -140,7 +139,7 @@ public abstract class AbsCmd {
         @Override
         public Collection<FileStatus> getFileStatusList() {
             List<FileStatus> list = new ArrayList<>();
-            Utils.runCommand(String.format(CHANGED_COM, projectDir.getAbsolutePath()), line -> {
+            Utils.runCommand(CHANGED_COM, projectDir, line -> {
                 if (line.length() < 8) {
                     return true;
                 }
@@ -158,7 +157,7 @@ public abstract class AbsCmd {
         @Override
         public String getVersion() {
             StringBuilder builder = new StringBuilder();
-            Utils.runCommand(VERSION_COM, line -> {
+            Utils.runCommand(VERSION_COM, projectDir, line -> {
                 String[] data = line.split(":");
                 if (data.length < 2) {
                     return true;
@@ -184,7 +183,7 @@ public abstract class AbsCmd {
             }
             Set<File> set = new HashSet<>();
             int urlLength = relativeUrl.length();
-            Utils.runCommand(String.format(VERSION_ChANGE_COM, startVersion, endVersion), line -> {
+            Utils.runCommand(String.format(VERSION_ChANGE_COM, startVersion, endVersion), projectDir, line -> {
                 if (line.length() < 8) {
                     return true;
                 }
@@ -193,7 +192,7 @@ public abstract class AbsCmd {
                     return true;
                 }
                 int startIndex = index + urlLength + 1;
-                if(line.length() < startIndex){
+                if (line.length() < startIndex) {
                     return true;
                 }
                 String[] ss = line.substring(startIndex).trim().split(" ");
@@ -203,7 +202,7 @@ public abstract class AbsCmd {
                 }
                 return true;
             });
-            return set;// Stream.of(set.toArray(new File[0])).collect(Collectors.toList());
+            return set;
         }
     }
 
@@ -211,7 +210,7 @@ public abstract class AbsCmd {
      * git 命令
      */
     private static class Git extends AbsCmd {
-        private final static String CHANGED_COM = "git status %1s -s --no-renames";
+        private final static String CHANGED_COM = "git status -s --no-renames";
         private final static String VERSION_COM = "git log --pretty=format:%h -1";
         private final static String VERSION_ChANGE_COM = "git diff --name-only %1s %2s %3s";
 
@@ -222,7 +221,7 @@ public abstract class AbsCmd {
         @Override
         public Collection<FileStatus> getFileStatusList() {
             List<FileStatus> list = new ArrayList<>();
-            Utils.runCommand(String.format(CHANGED_COM, projectDir.getAbsolutePath()), line -> {
+            Utils.runCommand(CHANGED_COM, projectDir, line -> {
                 if (line.length() < 3) {
                     return true;
                 }
@@ -240,7 +239,7 @@ public abstract class AbsCmd {
         @Override
         public String getVersion() {
             StringBuilder builder = new StringBuilder();
-            Utils.runCommand(VERSION_COM, line -> {
+            Utils.runCommand(VERSION_COM, projectDir, line -> {
                 builder.append(line.trim());
                 return true;
             });
@@ -251,7 +250,7 @@ public abstract class AbsCmd {
         public Collection<File> getVersionFileList(String startVersion, String endVersion) {
             List<File> list = new ArrayList<>();
             int length = projectDir.getName().length();
-            Utils.runCommand(String.format(VERSION_ChANGE_COM, startVersion, endVersion, projectDir.getAbsolutePath()), line -> {
+            Utils.runCommand(String.format(VERSION_ChANGE_COM, startVersion, endVersion, projectDir.getAbsolutePath()), projectDir, line -> {
                 File file = new File(projectDir, line.substring(length).trim());
                 if (file.isFile() && file.exists()) {
                     list.add(file);

@@ -32,7 +32,6 @@ import com.twlk.lib_lint_base.IncrementLintLintBaseTask
 import com.twlk.lib_lint_base.Utils
 import com.twlk.lib_lint_base.extension.IncrementLintLintExtension
 import com.twlk.lib_lint_base.extension.MLintOptions
-import com.twlk.lib_lint_client_v3_3.IncrementLintLintTask
 import com.twlk.lint_plugin.task.CommandTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -111,7 +110,7 @@ class LintPlugin : Plugin<Project> {
         } else if (Utils.compareVersion("3.3.0", agpVersion) > 0) {
             com.twlk.lib_lint_client_v3_2.IncrementLintLintTask::class.java
         } else if (Utils.compareVersion("3.6.0", agpVersion) > 0) {
-            IncrementLintLintTask::class.java
+            com.twlk.lib_lint_client_v3_3.IncrementLintLintTask::class.java
         } else if (Utils.compareVersion("4.1.0", agpVersion) > 0) {
             com.twlk.lib_lint_client_v3_6.IncrementLintLintTask::class.java
         } else {
