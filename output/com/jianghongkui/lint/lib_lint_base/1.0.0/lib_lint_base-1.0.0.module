@@ -1,0 +1,74 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.jianghongkui.lint",
+    "module": "lib_lint_base",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.5",
+      "buildId": "xpu7ub5i45guplxagemmwqh2i4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "lib_lint_base-1.0.0.jar",
+          "url": "lib_lint_base-1.0.0.jar",
+          "size": 32414,
+          "sha512": "731986e0b9aad2303894116e987418f99e3a54e32b04eb5602a0e78df9766539f574efce0e6dc228a450f8d301597d9da0b909bbdcd200e30d58c0af7e674c99",
+          "sha256": "17fb889b9af5318675629adb43c42a2df1af8fca1a13cd599d75b45acef5072f",
+          "sha1": "448c3d2334941fe196265aff113b84d21ed4638c",
+          "md5": "d4d0696a44d79d47268c7c1567caf3b3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.3.72"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lib_lint_base-1.0.0.jar",
+          "url": "lib_lint_base-1.0.0.jar",
+          "size": 32414,
+          "sha512": "731986e0b9aad2303894116e987418f99e3a54e32b04eb5602a0e78df9766539f574efce0e6dc228a450f8d301597d9da0b909bbdcd200e30d58c0af7e674c99",
+          "sha256": "17fb889b9af5318675629adb43c42a2df1af8fca1a13cd599d75b45acef5072f",
+          "sha1": "448c3d2334941fe196265aff113b84d21ed4638c",
+          "md5": "d4d0696a44d79d47268c7c1567caf3b3"
+        }
+      ]
+    }
+  ]
+}

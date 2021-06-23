@@ -1,0 +1,116 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.jianghongkui.lint",
+    "module": "lintplugin",
+    "version": "1.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.5",
+      "buildId": "xpu7ub5i45guplxagemmwqh2i4"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "lintplugin-1.1.0.jar",
+          "url": "lintplugin-1.1.0.jar",
+          "size": 22788,
+          "sha512": "cd360baffeaa944ba79065eb086750738e530f812f9e82427aa0404b0c24c3c4195797e3e7578b24cb7cd14c198a05b7f58ba8d01749b1037aac1c48d202d98f",
+          "sha256": "1c7ed57ad22591759f960c270dc7e3a36911bfdfe5c6eb26ff11f360834be3a9",
+          "sha1": "b3d83c289149db251d46c52e3151d1a0aa5bec20",
+          "md5": "b672ba906573d4ce1e3f1cc4c1b3dd6a"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.3.72"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_base",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_client_v3_2",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_client_v3_3",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_client_v3_6",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_client_v4_1",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "com.jianghongkui.lint",
+          "module": "lib_lint_client_v4_2",
+          "version": {
+            "requires": "1.0.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lintplugin-1.1.0.jar",
+          "url": "lintplugin-1.1.0.jar",
+          "size": 22788,
+          "sha512": "cd360baffeaa944ba79065eb086750738e530f812f9e82427aa0404b0c24c3c4195797e3e7578b24cb7cd14c198a05b7f58ba8d01749b1037aac1c48d202d98f",
+          "sha256": "1c7ed57ad22591759f960c270dc7e3a36911bfdfe5c6eb26ff11f360834be3a9",
+          "sha1": "b3d83c289149db251d46c52e3151d1a0aa5bec20",
+          "md5": "b672ba906573d4ce1e3f1cc4c1b3dd6a"
+        }
+      ]
+    }
+  ]
+}
