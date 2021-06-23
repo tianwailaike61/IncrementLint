@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,17 +31,17 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author twlk
+ * @author hongkui.jiang
  * @Date 2019/3/12
  */
-public class FnLogger {
+public class IncrementLogger {
 
     private static StringBuilder builder;
     private static String logFilePath;
 
     private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss -", Locale.CHINESE);
 
-    private FnLogger() {
+    private IncrementLogger() {
     }
 
     public static void setOutFile(String filePath) {
@@ -50,7 +50,7 @@ public class FnLogger {
 
     public static void addLog(String msg) {
 
-        System.out.println(msg);
+//        System.out.println(msg);
 
         if (builder == null) {
             builder = new StringBuilder();

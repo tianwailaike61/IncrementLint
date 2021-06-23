@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +29,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author twlk
+ * @author hongkui.jiang
  * @Date 2019-04-26
  */
-public class MLintOptions {
+public class IncrementLintOptions {
 
     public File htmlOutput;
+    public File lintXmlPath;
     public final Set<String> disable = new HashSet<>();
     public final Set<String> enable = new HashSet<>();
     public final Set<String> check = new HashSet<>();
 
-    public MLintOptions() {
+    public IncrementLintOptions() {
     }
 
     /**
@@ -92,6 +93,10 @@ public class MLintOptions {
 
     public void htmlOutput(File file) {
         htmlOutput = file;
+    }
+
+    public void lintXml(File file) {
+        this.lintXmlPath = file;
     }
 
     public File getHtmlOutput() {

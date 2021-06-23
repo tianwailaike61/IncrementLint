@@ -107,7 +107,7 @@ object UsageIssue : BaseIssue() {
     val ISSUE_THREAD: Issue = createJavaIssue(
             "ThreadUsage",
             "避免自己创建线程",
-            "请勿直接调用new Thread()，请统一使用ExThead",
+            "请勿直接调用new Thread()，请统一使用线程池",
             HIGH,
             ThreadUsageDetector::class.java)
 
@@ -123,7 +123,7 @@ object UsageIssue : BaseIssue() {
     val ISSUE_LOG: Issue = createJavaIssue(
             "LogUsage",
             "避免使用android.util.Log",
-            "请勿直接调用android.util.Log，应该使用统一工具类ExLog",
+            "请勿直接调用android.util.Log，应该使用统一Log工具类",
             HIGH,
             MethodCallUsageDetector::class.java)
 

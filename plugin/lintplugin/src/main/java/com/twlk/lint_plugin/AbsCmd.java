@@ -24,7 +24,7 @@
 
 package com.twlk.lint_plugin;
 
-import com.twlk.lib_lint_base.FnLogger;
+import com.twlk.lib_lint_base.IncrementLogger;
 import com.twlk.lib_lint_base.Utils;
 
 import org.gradle.api.GradleException;
@@ -85,7 +85,7 @@ public abstract class AbsCmd {
 
     public static AbsCmd get(Project project) {
         int toolType = checkToolType(project);
-        FnLogger.addLog("The type of the tool is " + toolType);
+        IncrementLogger.addLog("The type of the tool is " + toolType);
         if (toolType == -1) {
             return null;
         }

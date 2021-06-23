@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package com.twlk.lib_lint_base.extension;
 import java.io.File;
 
 /**
- * @author twlk
+ * @author hongkui.jiang
  * @Date 2019-04-23
  */
 public class CommandExtension {

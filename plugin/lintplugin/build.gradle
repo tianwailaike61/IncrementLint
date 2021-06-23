@@ -10,6 +10,7 @@ dependencies {
     implementation project(path: ":lib_lint_client_v3_3")
     implementation project(path: ":lib_lint_client_v3_6")
     implementation project(path: ":lib_lint_client_v4_1")
+    implementation project(path: ":lib_lint_client_v4_2")
 }
 
 sourceSets {

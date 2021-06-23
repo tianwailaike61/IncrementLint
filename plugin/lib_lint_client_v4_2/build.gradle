@@ -1,0 +1,37 @@
+apply from: "../lint.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly project(":lib_lint_base")
+    compileOnly gradleApi()
+    compileOnly("com.android.tools.build:gradle:4.2.0") {
+        exclude group: "org.codehaus.groovy"
+        exclude group: "org.ow2.asm"
+        exclude group: "org.jetbrains.kotlin"
+        exclude group: "com.android"
+        exclude group: "com.android.tools"
+        exclude group: "com.android.tools.lint"
+        exclude group: "com.android.tools.ddms"
+        exclude group: "com.android.tools.build.jetifier"
+        exclude group: "com.android.tools.build", module: "manifest-merger"
+        exclude group: "com.android.tools.build", module: "builder-test-api"
+        exclude group: "com.android.tools.build", module: "apkzlib"
+        exclude group: "com.android.tools.build", module: "apksig"
+        exclude group: "com.android.tools.build", module: "aaptcompiler"
+        exclude group: "androidx.databinding"
+        exclude group: "com.android.tools.analytics-library"
+        exclude group: "com.google.code.gson"
+        exclude group: "com.google.code.findbugs"
+    }
+    compileOnly("com.android.tools.lint:lint-gradle:27.2.0") { //该版本需与导入项目的gradle版本匹配
+        exclude group: "org.jetbrains.kotlin"
+        exclude group: "org.codehaus.groovy"
+        exclude group: "com.android"
+        exclude group: "com.android.tools.ddms"
+        exclude group: "com.android.tools.build"
+        exclude group: "com.android.tools.analytics-library"
+    }
+}
+
+group GROUP
+version VERSION

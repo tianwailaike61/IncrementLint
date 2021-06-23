@@ -24,10 +24,10 @@
 
 package com.twlk.lint_plugin.task;
 
-import com.twlk.lib_lint_base.FnLogger;
+import com.twlk.lib_lint_base.IncrementLogger;
 import com.twlk.lib_lint_base.Utils;
 import com.twlk.lib_lint_base.extension.CommandExtension;
-import com.twlk.lib_lint_base.extension.IncrementLintLintExtension;
+import com.twlk.lib_lint_base.extension.IncrementLintExtension;
 import com.twlk.lint_plugin.AbsCmd;
 import com.twlk.lint_plugin.FileStatus;
 
@@ -65,14 +65,14 @@ public class CommandTask extends DefaultTask {
         try {
             Project project = getProject();
             BUILD_DIR = project.getBuildDir();
-            IncrementLintLintExtension incrementLintLintExtension = project.getExtensions().findByType(IncrementLintLintExtension.class);
+            IncrementLintExtension incrementLintLintExtension = project.getExtensions().findByType(IncrementLintExtension.class);
             if (incrementLintLintExtension == null) {
                 return;
             }
             CommandExtension extension = incrementLintLintExtension.commandExtension;
             AbsCmd cmd = AbsCmd.get(project);
             if (cmd == null) {
-                FnLogger.addLog("can not find the cmd,the lint will check all of the files");
+                IncrementLogger.addLog("can not find the cmd,the lint will check all of the files");
                 addChangedFiles(extension.changedInfoFile, getFileWithoutDir(project.getProjectDir()));
                 return;
             }
@@ -83,11 +83,11 @@ public class CommandTask extends DefaultTask {
             try {
                 version = cmd.getVersion();
             } catch (Exception e) {
-                FnLogger.addLog("can not get version -" + e);
+                IncrementLogger.addLog("can not get version -" + e);
             }
-            FnLogger.addLog("last version:%1s current version:%2s", lastVersion, version);
+            IncrementLogger.addLog("last version:%1s current version:%2s", lastVersion, version);
             if (lastVersion == null || lastVersion.isEmpty()) {
-                FnLogger.addLog("first check");
+                IncrementLogger.addLog("first check");
                 Collection<String> collections = getFileWithoutDir(project.getProjectDir());
                 addChangedFiles(extension.changedInfoFile, collections);
                 setLastVersion(version, extension);
@@ -103,7 +103,7 @@ public class CommandTask extends DefaultTask {
             if (!lastVersion.equals(version)) {
                 setLastVersion(version, extension);
                 Collection<File> versionChangedFile = cmd.getVersionFileList(version, lastVersion);
-                FnLogger.addLog("the files changed by each commit will ba added to check list -" + versionChangedFile.size());
+                IncrementLogger.addLog("the files changed by each commit will ba added to check list -" + versionChangedFile.size());
 
                 Collection<String> cs = getFileWithoutDir(versionChangedFile);
                 if (cs != null && !cs.isEmpty()) {
@@ -112,10 +112,10 @@ public class CommandTask extends DefaultTask {
             }
             addChangedFiles(extension.changedInfoFile, set);
         } catch (RuntimeException e) {
-            FnLogger.addLog("CommandTask Exception--" + Utils.printException(e));
+            IncrementLogger.addLog("CommandTask Exception--" + Utils.printException(e));
             throw e;
         } finally {
-            FnLogger.flush();
+            IncrementLogger.flush();
         }
     }
 

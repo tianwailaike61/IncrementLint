@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,10 @@ package com.twlk.lib_lint_base;
 
 import com.android.build.gradle.api.BaseVariant;
 import com.android.build.gradle.internal.api.BaseVariantImpl;
+import com.android.build.gradle.internal.dsl.LintOptions;
 import com.android.build.gradle.internal.scope.VariantScope;
 import com.android.build.gradle.internal.variant.BaseVariantData;
+import com.twlk.lib_lint_base.extension.IncrementLintOptions;
 
 import org.gradle.api.GradleException;
 
@@ -56,7 +58,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @author twlk
+ * @author hongkui.jiang
  * @Date 2019/3/12
  */
 public class Utils {
@@ -250,14 +252,14 @@ public class Utils {
             return buffer.toString();
         });
         int ret = process.waitFor();
-        FnLogger.addLog("%s execute ret:%d isError:%b", cmdStr, ret, isError.get());
+        IncrementLogger.addLog("%s execute ret:%d isError:%b", cmdStr, ret, isError.get());
         if (ret != 0 || isError.get()) {
             try {
-                FnLogger.addLog("error result: %s", errFuture.get());
+                IncrementLogger.addLog("error result: %s", errFuture.get());
             } catch (ExecutionException e) {
                 throw new GradleException("fail to get error info", e);
             }
-            FnLogger.flush();
+            IncrementLogger.flush();
             throw new GradleException("The command execute failed,please check your config\n");
         }
         String result;
@@ -407,6 +409,28 @@ public class Utils {
             return null;
         }
         return data.getScope();
+    }
+
+    public static LintOptions getOptions(IncrementLintOptions incrementLintOptions, LintOptions options) {
+        options.setAbortOnError(true);
+        options.setTextReport(false);
+        options.setXmlReport(false);
+        if (!incrementLintOptions.disable.isEmpty()) {
+            options.disable(incrementLintOptions.disable.toArray(new String[0]));
+        }
+        if (!incrementLintOptions.enable.isEmpty()) {
+            options.enable(incrementLintOptions.enable.toArray(new String[0]));
+        }
+        if (!incrementLintOptions.check.isEmpty()) {
+            options.check(incrementLintOptions.enable.toArray(new String[0]));
+        }
+        if (incrementLintOptions.htmlOutput != null) {
+            options.setHtmlOutput(incrementLintOptions.htmlOutput);
+        }
+        if (incrementLintOptions.lintXmlPath != null) {
+            options.setLintConfig(incrementLintOptions.lintXmlPath);
+        }
+        return options;
     }
 
 }

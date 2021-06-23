@@ -3,7 +3,7 @@ ext {
     MAVEN_URL = uri('../output')
     versions = [
             'kotlin'       : '1.3.72',
-            'androidPlugin': '4.1.3',
+            'androidPlugin': '4.2.1',
             'androidTools' : '26.2.1',
             'java'         : JavaVersion.VERSION_1_8,
     ]

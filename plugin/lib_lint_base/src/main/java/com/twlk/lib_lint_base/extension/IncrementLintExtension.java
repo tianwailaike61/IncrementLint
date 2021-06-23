@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,31 +30,34 @@ import org.gradle.api.Project;
 import java.io.File;
 
 /**
- * @author twlk
+ * @author hongkui.jiang
  * @Date 2019-04-23
  */
-public class IncrementLintLintExtension {
-
-    public static final String NAME = "IncrementLint";
+public class IncrementLintExtension {
 
     private static String BASE_PATH;
 
-    public com.twlk.lib_lint_base.extension.CommandExtension commandExtension;
+    public CommandExtension commandExtension;
 
     private String logPath;
+    private String lintXmlPath;
     private File lintConfigFile;
+    public boolean increment = true;
 
-    public IncrementLintLintExtension() {
+    public IncrementLintExtension() {
     }
 
-    public void init(Project project) {
-        BASE_PATH = new File(project.getRootDir(), "incrementLint").getAbsolutePath();
-        logPath = new File(BASE_PATH, "lint.log").getAbsolutePath();
+    public void init(Project project, String prefix) {
+        BASE_PATH = new File(project.getRootDir(), prefix).getAbsolutePath();
+        logPath = new File(BASE_PATH, prefix + "Lint.log").getAbsolutePath();
         commandExtension = new CommandExtension(BASE_PATH);
-        MLintOptions options = project.getExtensions().findByType(MLintOptions.class);
+        IncrementLintOptions options = project.getExtensions().findByType(IncrementLintOptions.class);
+        File xmlFile = new File(BASE_PATH, "lint.xml");
+        lintXmlPath = xmlFile.getAbsolutePath();
         lintConfigFile = new File(BASE_PATH, "lint.config");
         if (options != null) {
-            options.htmlOutput(new File(BASE_PATH, "lint.html"));
+            options.lintXml(xmlFile);
+            options.htmlOutput(new File(BASE_PATH, prefix + "Lint.html"));
         }
     }
 
@@ -64,5 +67,17 @@ public class IncrementLintLintExtension {
 
     public String getLogPath() {
         return logPath;
+    }
+
+    public String getLintXmlPath() {
+        return lintXmlPath;
+    }
+
+    public void setIncrement(boolean flag) {
+        increment = flag;
+    }
+
+    public boolean isIncrement() {
+        return increment;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,7 @@ package com.twlk.lib_lint_client_v4_1
 
 import com.twlk.lib_lint_base.AbsLintRunner
 import java.io.File
-import java.net.URI
 import java.net.URL
-import java.net.URLClassLoader
 
 class LintRunner : AbsLintRunner() {
 

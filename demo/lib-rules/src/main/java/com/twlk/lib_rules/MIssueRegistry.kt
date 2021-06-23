@@ -35,7 +35,6 @@ import java.util.*
 open class MIssueRegistry : IssueRegistry() {
     override val issues: List<Issue>
         get() {
-            System.out.println("jhk===MIssueRegistry start=")
             val list = ArrayList<Issue>()
             list.addAll(NameIssue.getAllIssue())
             list.addAll(NoChineseIssue.getAllIssue())

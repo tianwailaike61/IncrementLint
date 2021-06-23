@@ -1,12 +1,34 @@
 apply from: "../lint.gradle"
 dependencies {
     compileOnly("com.android.tools.lint:lint-gradle:26.2.1") { //该版本需与导入项目的gradle版本匹配
+        exclude group: "org.jetbrains.kotlin"
         exclude group: "org.codehaus.groovy"
+        exclude group: "com.android"
+        exclude group: "com.android.tools.ddms"
         exclude group: "com.android.tools.build"
+        exclude group: "com.android.tools.analytics-library"
     }
     compileOnly gradleApi()
-    implementation project(":lib_lint_base")
-    compileOnly "com.android.tools.build:gradle:3.2.1"
+    compileOnly project(":lib_lint_base")
+    compileOnly ("com.android.tools.build:gradle:3.2.1"){
+        exclude group: "org.codehaus.groovy"
+        exclude group: "org.ow2.asm"
+        exclude group: "org.jetbrains.kotlin"
+        exclude group: "com.android"
+        exclude group: "com.android.tools"
+        exclude group: "com.android.tools.lint"
+        exclude group: "com.android.tools.ddms"
+        exclude group: "com.android.tools.build.jetifier"
+        exclude group: "com.android.tools.build", module: "manifest-merger"
+        exclude group: "com.android.tools.build", module: "builder-test-api"
+        exclude group: "com.android.tools.build", module: "apkzlib"
+        exclude group: "com.android.tools.build", module: "apksig"
+        exclude group: "com.android.tools.build", module: "aaptcompiler"
+        exclude group: "androidx.databinding"
+        exclude group: "com.android.tools.analytics-library"
+        exclude group: "com.google.code.gson"
+        exclude group: "com.google.code.findbugs"
+    }
 }
 group GROUP
 version VERSION

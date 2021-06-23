@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ import com.android.tools.lint.gradle.api.LintExecutionRequest;
 import com.android.tools.lint.gradle.api.VariantInputs;
 import com.android.utils.Pair;
 import com.twlk.lib_lint_base.LintResultCollector;
-import com.twlk.lib_lint_client_v3_2.IncrementLintClient;
+import com.twlk.lib_lint_client_v3_2.FnLintClient;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -232,8 +232,8 @@ public class LintGradleExecution {
             boolean allowFix) {
         IssueRegistry registry = createIssueRegistry(isAndroid);
         LintCliFlags flags = new LintCliFlags();
-        IncrementLintClient client =
-                new IncrementLintClient(
+        FnLintClient client =
+                new FnLintClient(
                         descriptor.getGradlePluginVersion(),
                         registry,
                         flags,

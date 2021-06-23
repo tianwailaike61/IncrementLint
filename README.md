@@ -3,13 +3,13 @@
 
 ## 功能描述
 
-1、自定义Android常用规则（参见lib-rules)  
-2、利用gradle插件和版本管理（git或svn）实现对修改代码进行检查，避免大型项目代码量过大导致检查时间长的问题
-3、该项目保证仅检查java代码的正确性
+- 1、自定义Android常用规则（参见lib-rules)  
+- 2、利用gradle插件和版本管理（git或svn）实现对修改代码进行检查，避免大型项目代码量过大导致检查时间长的问题
+- 3、该项目自定义规则保证仅检查java代码的正确性
 
 ## 使用方式
-1、将[output](https://github.com/tianwailaike61/IncrementLint/output)中的文件拷贝到某文件夹
-2、在项目根目录的build.gradle添加如下信息：
+- 1、将[output](https://github.com/tianwailaike61/IncrementLint/output)中的文件拷贝到某文件夹
+- 2、在项目根目录的build.gradle添加如下信息：
 ```
 buildscript {
 	// 添加公共信息
@@ -32,7 +32,7 @@ buildscript {
 }
 
 ```
-3、在app的build.gradle中添加插件和自定义lint规则包
+- 3、在app的build.gradle中添加插件和自定义lint规则包
 
 ```
 apply plugin: 'com.android.application'
@@ -41,13 +41,15 @@ apply plugin: 'IncrementLint' //添加gradle插件
 dependencies {
     ....
     //添加自定义的lint规则包
-    lintChecks project(path: ':lib-rules')//lintChecks "{group}:{name}:{version}"
+    lintChecks "{group}:{name}:{version}"
 }
 ```
 ### 日志
-2021.5.3
+- 2021.6.23  
+ 兼容4.2插件版本  
+- 2021.5.3  
   兼容3.2~4.1插件版本  
-2023.11.5
+- 2020.11.5  
   解决升级AndroidX包中自定义规则导致lib-rules中的规则无效
 
 ### 参考  

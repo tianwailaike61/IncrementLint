@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,13 @@ abstract class AbsLintRunner : ILintRunner {
 
     private var buildCompletionListenerRegistered = false
 
-    override fun runLint(gradle: Gradle, request: LintExecutionRequest, lintClassPath: FileCollection, collector: LintResultCollector, clientClz: Class<*>) {
+    override fun runLint(
+        gradle: Gradle,
+        request: LintExecutionRequest,
+        lintClassPath: FileCollection,
+        collector: LintResultCollector,
+        clientClz: Class<*>
+    ) {
         try {
             val classPaths = HashSet<File>()
             val clientJar = File(clientClz.protectionDomain.codeSource.location.file)
@@ -54,7 +60,10 @@ abstract class AbsLintRunner : ILintRunner {
             classPaths.addAll(lintClassPath)
             val loader = getLintClassLoader(gradle, classPaths, clientJar.name)
             val cls = loader.loadClass("com.twlk.lib_lint_client.LintGradleExecution")
-            val constructor = cls.getDeclaredConstructor(LintExecutionRequest::class.java, LintResultCollector::class.java)
+            val constructor = cls.getDeclaredConstructor(
+                LintExecutionRequest::class.java,
+                LintResultCollector::class.java
+            )
             val obj = constructor.newInstance(request, collector)
             val analyseMethod = cls.getMethod("analyze")
             analyseMethod.invoke(obj)
@@ -81,7 +90,11 @@ abstract class AbsLintRunner : ILintRunner {
         disposeMethod.invoke(null)
     }
 
-    protected open fun getLintClassLoader(gradle: Gradle, lintClassPath: Set<File>, customJarName: String): ClassLoader {
+    protected open fun getLintClassLoader(
+        gradle: Gradle,
+        lintClassPath: Set<File>,
+        customJarName: String
+    ): ClassLoader {
         var l = loader
         if (l == null) {
             val urls = getUrls(lintClassPath, customJarName)
@@ -135,19 +148,19 @@ abstract class AbsLintRunner : ILintRunner {
 
             // The set of jars that lint needs that *aren't* already used/loaded by gradle-core
             if (name.startsWith("uast-") ||
-                    name.startsWith("intellij-core-") ||
-                    name.startsWith("kotlin-compiler-") ||
-                    name.startsWith("asm-") ||
-                    name.startsWith("kxml2-") ||
-                    name.startsWith("trove4j-") ||
-                    name.startsWith("groovy-all-") ||
+                name.startsWith("intellij-core-") ||
+                name.startsWith("kotlin-compiler-") ||
+                name.startsWith("asm-") ||
+                name.startsWith("kxml2-") ||
+                name.startsWith("trove4j-") ||
+                name.startsWith("groovy-all-") ||
 
-                    // All the lint jars, except lint-gradle-api jar (self)
-                    name.startsWith("lint-") &&
-                    // Do *not* load this class in a new class loader; we need to
-                    // share the same class as the one already loaded by the Gradle
-                    // plugin
-                    !name.startsWith("lint-gradle-api-")
+                // All the lint jars, except lint-gradle-api jar (self)
+                name.startsWith("lint-") &&
+                // Do *not* load this class in a new class loader; we need to
+                // share the same class as the one already loaded by the Gradle
+                // plugin
+                !name.startsWith("lint-gradle-api-")
             ) {
                 urls.add(file.toURI().toURL())
             }
@@ -157,7 +170,7 @@ abstract class AbsLintRunner : ILintRunner {
     }
 
     private fun wrapExceptionAsString(t: Throwable) = RuntimeException(
-            "Lint infrastructure error\nCaused by: ${Throwables.getStackTraceAsString(t)}\n"
+        "Lint infrastructure error\nCaused by: ${Throwables.getStackTraceAsString(t)}\n"
     )
 
     companion object {

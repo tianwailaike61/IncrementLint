@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 tianwailaike61
+ * Copyright (c) 2021 tianwailaike61
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -87,9 +87,9 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest, private 
     private val reportsDir: File? get() = descriptor.reportsDir
 
     private fun abort(
-            client: IncrementLintClient?,
-            warnings: List<Warning>?,
-            isAndroid: Boolean
+        client: IncrementLintClient?,
+        warnings: List<Warning>?,
+        isAndroid: Boolean
     ) {
         var message: String = if (isAndroid) {
             if (isFatalOnly) {
@@ -175,19 +175,19 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest, private 
         val registry: IssueRegistry = BuiltinIssueRegistry()
         val flags = LintCliFlags()
         val client = IncrementLintClient(
-                descriptor.gradlePluginVersion,
-                registry,
-                flags,
-                descriptor.project,
-                descriptor.sdkHome,
-                variantName,
-                variantInputs,
-                descriptor.buildToolsRevision,
-                KotlinSourceFoldersResolver { name: String, project: Project? ->
-                    descriptor.getKotlinSourceFolders(name, project)
-                },
-                isAndroid,
-                variantName
+            descriptor.gradlePluginVersion,
+            registry,
+            flags,
+            descriptor.project,
+            descriptor.sdkHome,
+            variantName,
+            variantInputs,
+            descriptor.buildToolsRevision,
+            KotlinSourceFoldersResolver { name: String, project: Project? ->
+                descriptor.getKotlinSourceFolders(name, project)
+            },
+            isAndroid,
+            variantName
         )
         val fatalOnly = descriptor.isFatalOnly
         if (fatalOnly) {
@@ -372,19 +372,19 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest, private 
             val variantInputs = descriptor.getVariantInputs(variantName)
                     ?: error(variantName)
             val client = IncrementLintClient(
-                    descriptor.gradlePluginVersion,
-                    registry,
-                    flags,
-                    descriptor.project,
-                    sdkHome,
-                    variantName,
-                    variantInputs,
-                    descriptor.buildToolsRevision,
-                    KotlinSourceFoldersResolver { name: String, project: Project? ->
-                        descriptor.getKotlinSourceFolders(name, project)
-                    },
-                    true,
-                    if (isFatalOnly) LintBaseline.VARIANT_FATAL else LintBaseline.VARIANT_ALL
+                descriptor.gradlePluginVersion,
+                registry,
+                flags,
+                descriptor.project,
+                sdkHome,
+                variantName,
+                variantInputs,
+                descriptor.buildToolsRevision,
+                KotlinSourceFoldersResolver { name: String, project: Project? ->
+                    descriptor.getKotlinSourceFolders(name, project)
+                },
+                true,
+                if (isFatalOnly) LintBaseline.VARIANT_FATAL else LintBaseline.VARIANT_ALL
             )
 
             syncOptions(
@@ -537,15 +537,15 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest, private 
     }
 
     private fun syncOptions(
-            options: LintModelLintOptions?,
-            client: IncrementLintClient,
-            flags: LintCliFlags,
-            variantName: String?,
-            project: Project,
-            reportsDir: File?,
-            report: Boolean,
-            fatalOnly: Boolean,
-            allowAutoFix: Boolean
+        options: LintModelLintOptions?,
+        client: IncrementLintClient,
+        flags: LintCliFlags,
+        variantName: String?,
+        project: Project,
+        reportsDir: File?,
+        report: Boolean,
+        fatalOnly: Boolean,
+        allowAutoFix: Boolean
     ) {
         if (options != null) {
             syncTo(
@@ -569,10 +569,11 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest, private 
     }
 
     private fun createIssueRegistry(isAndroid: Boolean): BuiltinIssueRegistry {
-        return if (isAndroid) {
-            BuiltinIssueRegistry()
-        } else {
-            NonAndroidIssueRegistry()
-        }
+        return NonAndroidIssueRegistry()
+//        return if (isAndroid) {
+//            BuiltinIssueRegistry()
+//        } else {
+//            NonAndroidIssueRegistry()
+//        }
     }
 }
