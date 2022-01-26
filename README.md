@@ -1,6 +1,8 @@
 # IncrementLint
 该项目主要针对Android项目编写lint gradle 插件，实现lint增量检查。参考：[自定义lint增量检查](https://www.jianshu.com/p/98b8b7d6fed3)
 
+gradle-plugin 7.0+版本已经支持lint增量检查，详情查看[Gradle](https://developer.android.google.cn/studio/releases/gradle-plugin.html)
+
 ## 功能描述
 
 - 1、自定义Android常用规则（参见lib-rules)  
